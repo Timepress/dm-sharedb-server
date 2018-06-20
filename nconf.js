@@ -25,7 +25,12 @@ function initNconf (dirname) {
   else if (stage) addNconfFile(nconf, stage)
   else if (app) addNconfFile(nconf, app)
 
-  const jsonFile = fs.readFileSync(dirname + '/config.json')
+  const jsonFile = nconf.file("config.json", {
+    file: 'config.json',
+    dir: dirname,
+    search: true
+  });
+
   nconf.defaults(jsonFile)
 
   // Copy REDIS_URL into env if present (it'll be used by redis-url module)

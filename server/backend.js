@@ -25,7 +25,7 @@ module.exports = (options) => {
 
   // ShareDB Setup
   let mongoUrl = conf.get('MONGO_URL')
-  if(!mongoUrl) console.error('KONGO_URL was not found!', mongoUrl)
+  if(!mongoUrl) console.error('MONGO_URL was not found!', mongoUrl)
   let mongo
   if (process.env.MONGO_SSL_CERT_PATH && process.env.MONGO_SSL_KEY_PATH) {
     let sslCert = fs.readFileSync(process.env.MONGO_SSL_CERT_PATH)
