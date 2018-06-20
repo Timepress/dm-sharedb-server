@@ -8,6 +8,7 @@ const redisPubSub = require('sharedb-redis-pubsub')
 const racer = require('racer')
 const redis = require('redis-url')
 const initAdmins = require('./initAdmins')
+const mongodb = require('mongodb');
 const MongoClient = require('mongodb').MongoClient
 const fs = require('fs')
 
@@ -28,21 +29,23 @@ module.exports = (options) => {
   if (process.env.MONGO_SSL_CERT_PATH && process.env.MONGO_SSL_KEY_PATH) {
     let sslCert = fs.readFileSync(process.env.MONGO_SSL_CERT_PATH)
     let sslKey = fs.readFileSync(process.env.MONGO_SSL_KEY_PATH)
-  
+
     mongo = shareDbMongo({
-      mongo: (callback) => {
-        MongoClient.connect(mongoUrl, {
-          server: {
-            sslKey: sslKey,
-            sslValidate: false,
-            sslCert: sslCert
-          },
-          allowAllQueries: true
-        }, callback)
-      }
+      mongo: function(callback) {
+        MongoClient.connect(mongoUrl, callback);
+      },
+      server: {
+        sslKey: sslKey,
+        sslValidate: false,
+        sslCert: sslCert
+      },
+      allowAllQueries: true
     })
   } else {
-    mongo = shareDbMongo(mongoUrl, {
+    mongo = shareDbMongo({
+      mongo: function(callback) {
+        MongoClient.connect(mongoUrl, callback);
+      },
       allowAllQueries: true
     })
   }
