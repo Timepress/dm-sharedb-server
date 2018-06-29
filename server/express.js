@@ -144,7 +144,7 @@ module.exports = (backend, appRoutes, error, options, cb) => {
         model.bundle((err, bundle) => {
           if (err) return next('500: ' + req.url + '. Error: ' + err)
           let html = defaultClientLayout({
-            styles: process.env.NODE_ENV === 'production'
+            styles: conf.get('NODE_ENV') === 'production'
                 ? resourceManager.getProductionStyles(appName) : '',
             head: getHead(appName),
             modelBundle: bundle,

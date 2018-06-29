@@ -6,6 +6,8 @@
 const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
+const conf = require('nconf')
+
 
 let PROJECT_PATH = process.env.PROJECT_PATH || process.cwd()
 let BUILD_CLIENT_PATH = process.env.BUILD_CLIENT_PATH || '/build/client/'
@@ -16,7 +18,7 @@ exports.getResourcePath = _.memoize((type, appName) => {
   let postfix = ''
   switch (type) {
     case 'bundle':
-      if (process.env.NODE_ENV === 'production') {
+      if (conf.get('NODE_ENV') === 'production') {
         postfix = '.' + exports.getHash(appName, type)
       } else {
         prefix = process.env.DEVSERVER_URL ||
@@ -35,7 +37,7 @@ exports.getResourcePath = _.memoize((type, appName) => {
 
 // Get assets hashes in production (used for long term caching)
 exports.getHash = _.memoize((appName, type) => {
-  if (process.env.NODE_ENV !== 'production') return
+  if (conf.get('NODE_ENV') !== 'production') return
   if (!appName) return ''
   let assetsMeta
   let hash = ''
