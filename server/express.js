@@ -17,8 +17,7 @@ const connectMongo = require('connect-mongo')
 const racerHighway = require('racer-highway')
 const resourceManager = require('./resourceManager')
 const defaultClientLayout = require('./defaultClientLayout')
-const { match } = require('react-router')
-
+var ReactRouter = require('react-router');
 const DEFAULT_SESSION_MAX_AGE = 1000 * 60 * 60 * 24 * 365 * 2 // 2 years
 function getDefaultSessionUpdateInterval (sessionMaxAge) {
   // maxAge is in ms. Return in s. So it's 1/10nth of maxAge.
@@ -170,7 +169,7 @@ module.exports = (backend, appRoutes, error, options, cb) => {
 }
 
 function matchUrl (location, routes, cb) {
-  match({ routes, location }, (err, redirectLocation, renderProps) => {
+  ReactRouter.match({ routes, location }, (err, redirectLocation, renderProps) => {
     if (err) return cb(err)
     cb(null, { redirectLocation, renderProps })
   })
