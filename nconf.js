@@ -2,9 +2,20 @@ const nconf = require('nconf')
 const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
+const os = require('os')
 
-let app = process.env.APP
-let stage = process.env.STAGE
+function getEnv() {
+  switch(os.hostname()) {
+    case 'editor.stage.avvoka.com':
+      return 'stage'
+    case 'editor.demo.avvoka.com':
+      return 'demo'
+    case 'editor.avvoka.com':
+      return 'production'
+  }
+  return 'development';
+}
+
 
 initNconf(process.env.ROOT_PATH || process.cwd())
 
@@ -12,7 +23,7 @@ function initNconf (dirname) {
   let addNconfFile = (nconf, filename) => {
     let filePath = path.join(dirname, 'config', filename + '.json')
     if (fs.existsSync(filePath)) {
-      nconf.file(filePath)
+      nconf.defaults(nconf.file(filePath))
       return true
     }
     console.log('Warning! APP and/or STATE are provided but config file ' +
@@ -20,18 +31,8 @@ function initNconf (dirname) {
     return false
   }
 
-  nconf.env()
-  if (app && stage) addNconfFile(nconf, app + '_' + stage)
-  else if (stage) addNconfFile(nconf, stage)
-  else if (app) addNconfFile(nconf, app)
+  addNconfFile(getEnv())
 
-  const jsonFile = nconf.file("config.json", {
-    file: 'config.json',
-    dir: dirname,
-    search: true
-  });
-
-  nconf.defaults(jsonFile)
 
   // Copy REDIS_URL into env if present (it'll be used by redis-url module)
   if (!process.env.REDIS_URL && nconf.get('REDIS_URL')) {
