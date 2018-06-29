@@ -31,7 +31,7 @@ function initNconf (dirname) {
     return false
   }
 
-  addNconfFile(getEnv())
+  addNconfFile(nconf, getEnv())
 
 
   // Copy REDIS_URL into env if present (it'll be used by redis-url module)
