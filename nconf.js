@@ -2,24 +2,11 @@ const nconf = require('nconf')
 const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
-const os = require('os')
-
-function getEnv() {
-  switch(os.hostname()) {
-    case 'editor.stage.avvoka.com':
-      return 'stage'
-    case 'editor.demo.avvoka.com':
-      return 'demo'
-    case 'editor.avvoka.com':
-      return 'production'
-  }
-  return 'development';
-}
-
 
 initNconf(process.env.ROOT_PATH || process.cwd())
 
 function initNconf (dirname) {
+
   let addNconfFile = (nconf, filename) => {
     let filePath = path.join(dirname, 'config', filename + '.json')
     if (fs.existsSync(filePath)) {
@@ -31,7 +18,8 @@ function initNconf (dirname) {
     return false
   }
 
-  addNconfFile(nconf, getEnv())
+  const environment = eval(fs.readFileSync(path.join(dirname, 'environment.js')))
+  addNconfFile(nconf, environment)
 
 
   // Copy REDIS_URL into env if present (it'll be used by redis-url module)
