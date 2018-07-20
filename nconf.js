@@ -19,7 +19,7 @@ function initNconf (dirname) {
   }
 
   const environment = eval(fs.readFileSync(path.join(dirname, 'environment.js')))
-  addNconfFile(nconf, environment)
+  addNconfFile(nconf, environment.getEnv())
 
 
   // Copy REDIS_URL into env if present (it'll be used by redis-url module)
