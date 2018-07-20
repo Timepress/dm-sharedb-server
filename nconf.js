@@ -19,6 +19,7 @@ function initNconf (dirname) {
   }
 
   const environment = require(path.join(dirname, 'environment.js'))
+  console.log('ënvironment is', environment, 'in-path:)', dirname, '+ environment.js')
   addNconfFile(nconf, environment.getEnv())
 
 
