@@ -18,7 +18,7 @@ function initNconf (dirname) {
     return false
   }
 
-  const environment = eval(fs.readFileSync(path.join(dirname, 'environment.js')))
+  const environment = require(path.join(dirname, 'environment.js'))
   addNconfFile(nconf, environment.getEnv())
 
 
